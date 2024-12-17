@@ -38,10 +38,14 @@ Start delivering convenience with **DrinkSafe App**!
    Get insights into sales and deliveries.
 
 ## Installation
-    docker-compose up --build
+      docker-compose up --build
 
 ## API Endpoints
-    refer to :- loacalhost:8000/api/docs/
+      loacalhost:8000/api/docs/
+
+   or
+
+      {baseUrl}/api/docs/
 
 
 
