@@ -1,6 +1,6 @@
 from django.contrib.auth import (get_user_model, authenticate)
 from rest_framework import serializers
-
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.utils.translation import gettext as _
 
 class UserSerializer(serializers.ModelSerializer):
@@ -36,14 +36,24 @@ class AuthTokenSerializer(serializers.Serializer):
 
         password = attrs.get('password')
         print(password)
-        user = authenticate(
-            request=self.context.get('request'),
-            username=email,
-            password= password,
-        )
-        if not user:
-            msg = _('Please enter Correct details')
-            raise serializers.ValidationError(msg, code='Authorisation')
+        if get_user_model().objects.filter(email=email):
+            user = authenticate(
+                request=self.context.get('request'),
+                email=email,
+                password= password,
+            )
+            if not user:
+                msg = _('Please enter Correct details')
+                raise serializers.ValidationError({'Please enter valid email or password'}, code='authorization')
 
-        attrs['user']= user
-        return attrs
+            refresh = RefreshToken.for_user(user)
+            tokens = {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }
+
+            return {
+                'user': user,
+                'tokens': tokens
+            }
+
