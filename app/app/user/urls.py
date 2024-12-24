@@ -7,5 +7,7 @@ app_name='user'
 urlpatterns = [
     path('create/', views.UserView.as_view(), name='create'),
     path('login/', views.CreateTokenView.as_view(), name='login'),
-    path('me/', views.UpdateUserView.as_view(), name='update')
+    path('me/', views.UpdateUserView.as_view(), name='update'),
+    path('allusers/', views.ListUserView.as_view(), name='all user details'),
+    path('me/<str:user_id>', views.UserDetailView.as_view(), name='user details')
 ]
